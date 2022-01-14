@@ -15,6 +15,7 @@
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.24.0",
+    "babel-cli": "^6.26.0",
     "bcryptjs": "^2.4.3",
     "dotenv-defaults": "^3.0.0",
     "email-validator": "^2.0.4",
@@ -34,7 +35,7 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "nodemon server.js --ext js --exec babel-node",
+    "start": "nodemon server.js ",
     "build": "react-scripts build",
     "start_react": "react-scripts start",
     "test": "react-scripts test",
