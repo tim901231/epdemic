@@ -9,9 +9,9 @@
     "@mui/lab": "^5.0.0-alpha.61",
     "@mui/material": "^5.2.4",
     "@reduxjs/toolkit": "^1.6.2",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
     "axios": "^0.24.0",
     "bcryptjs": "^2.4.3",
     "dotenv-defaults": "^3.0.0",
@@ -25,17 +25,15 @@
     "react-konva": "^17.0.2-5",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.1",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^4.0.1",
     "socket.io-client": "^4.4.0",
     "uuidv4": "^6.2.12",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^0.2.4"
   },
   "scripts": {
     "start": "node server.js",
     "build": "react-scripts build",
-    "start_react": "react-scripts start",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start_react": "react-scripts start"
   },
   "eslintConfig": {
     "extends": [
@@ -55,18 +53,5 @@
       "last 1 safari version"
     ]
   },
-  "type": "module",
-  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
-  "main": "server.js",
-  "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tim901231/epdemic.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/tim901231/epdemic/issues"
-  }
+  "type": "module"
 }
