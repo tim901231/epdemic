@@ -53,5 +53,9 @@
       "last 1 safari version"
     ]
   },
-  "type": "module"
+  "type": "module",
+  "engines": {
+    "node": "16.13.0",
+    "npm": "8.3.1"
+  }
 }
