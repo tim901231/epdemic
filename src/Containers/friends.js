@@ -8,8 +8,6 @@ import { styled } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
 import { Login, Joingame, Addevent } from "../features/session/sessionSlices";
 import useGame from "../Hooks/useGame";
-import { SocketContext } from "../socket";
-import io from "socket.io-client";
 
 import {
   Card,
