@@ -48,20 +48,14 @@ export default function Room(props) {
   const wsRef = useRef(null);
   // const { connectWebSocket, joinRoom, ws } = useGame();
   useEffect(() => {
-    let user;
-    const fetch = async () => {
-      user = await instance.get("/session");
-      if (user.data) {
-        // console.log(user.data);
-        dispatch(Login({ userId: user.data.userId, roomId: user.data.gameId }));
-        // console.log(user.data);
-      } else {
-        props.navigate("./login");
-      }
-    };
-
+    if (!userId) {
+      props.navigate("./login");
+    }
+    if (!roomId) {
+      props.navigate("./rooms");
+    }
     fetch().then(() => {
-      console.log(user.data);
+      // console.log(user.data);
       wsRef.current = io(WEBSOCKET_URL);
 
       wsRef.current.on("room", (data) => {
@@ -69,9 +63,9 @@ export default function Room(props) {
         setPlayers([...data.players]);
       });
       wsRef.current.on("gameStarted", () => {
-        props.navigate(`./game?gameId=${user.data.gameId}`);
+        props.navigate(`./game?gameId=${roomId}`);
       });
-      wsRef.current.emit("room", user.data.gameId);
+      wsRef.current.emit("room", roomId);
     });
 
     //dispatch(Addevent({ event: "room" }));

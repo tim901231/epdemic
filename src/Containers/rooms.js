@@ -43,21 +43,19 @@ export default function Rooms(props) {
   const dispatch = useDispatch();
   // const { connectWebSocket, joinRoom, ws } = useGame();
   useEffect(() => {
+    if (!userId) {
+      props.navigate("/login");
+    }
     const fetch = async () => {
-      const user = await instance.get("/session");
-      if (user.data) {
-        dispatch(Login({ userId: user.data.userId, roomId: user.data.gameId }));
-        console.log(user.data);
-        try {
-          if (user.data.userId) {
-            const roomId = await instance.post("/room", {
-              userId,
-            });
-            if (roomId.data.roomId.length > 0) {
-              props.navigate(`./room?roomId=${roomId.data.roomId}`);
-            }
-          }
-        } catch (e) {}
+      try {
+        const roomId = await instance.post("/room", {
+          userId,
+        });
+        if (roomId.data.roomId.length > 0) {
+          props.navigate(`./room?roomId=${roomId.data.roomId}`);
+        }
+      } catch (e) {
+        console.log(e);
       }
       const { data } = await instance.get("/rooms");
       setRooms(data);

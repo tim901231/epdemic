@@ -53,54 +53,48 @@ function Game(props) {
     setVirus,
   } = useGame();
   useEffect(() => {
-    let user;
-    const fetch = async () => {
-      user = await instance.get("/session");
-      if (user.data) {
-        dispatch(Login({ userId: user.data.userId, roomId: user.data.gameId }));
-      }
-    };
-    fetch().then(() => {
-      wsRef.current = io(WEBSOCKET_URL);
-      // wsRef.current.on("room", (data) => {
-      //   console.log(data.players);
-      //   setPlayers([...data.players]);
-      // });
+    if (!userId) {
+      props.navigate("/login");
+    }
 
-      wsRef.current.on("gameDetail", (data) => {
-        setOthers(
-          data.players.filter((player) => player.playerId !== user.data.userId)
-        );
-        setMe(
-          data.players.filter((player) => player.playerId === user.data.userId)
-        );
-        setPlayers(data.players);
-        setVirus(data.virus);
-        setWho(data.who);
-        setPlayerDeck(data.playerDeck);
-        setDiscardPlayerDeck(data.discardplayerDeck);
-        setVirusDeck(data.virusDeck);
-        setDiscardVirusDeck(data.discardvirusDeck);
-      });
-      wsRef.current.on("drawPlayerDeck", (data) => {
-        setPlayerDeck(data.playerDeck);
-        setDiscardPlayerDeck(data.discardplayerDeck);
-      });
-      wsRef.current.on("drawvirusDeck", (data) => {
-        setVirusDeck(data.virusDeck);
-        setDiscardVirusDeck(data.discardvirusDeck);
-      });
-      wsRef.current.on("setVirus", (data) => {
-        setVirus(data.virus);
-      });
-      wsRef.current.on("setWho", (data) => {
-        setWho(data.who);
-      });
-      wsRef.current.on("setLeftMove", (data) => {
-        setLeftMove(data.leftMove);
-      });
-      wsRef.current.emit("queryGame", user.data.gameId);
+    wsRef.current = io(WEBSOCKET_URL);
+    // wsRef.current.on("room", (data) => {
+    //   console.log(data.players);
+    //   setPlayers([...data.players]);
+    // });
+
+    wsRef.current.on("gameDetail", (data) => {
+      setOthers(data.players.filter((player) => player.playerId !== userId));
+      setMe(data.players.filter((player) => player.playerId === userId));
+      setPlayers(data.players);
+      setVirus(data.virus);
+      setWho(data.who);
+      setPlayerDeck(data.playerDeck);
+      setDiscardPlayerDeck(data.discardplayerDeck);
+      setVirusDeck(data.virusDeck);
+      setDiscardVirusDeck(data.discardvirusDeck);
     });
+    wsRef.current.on("drawPlayerDeck", (data) => {
+      setPlayerDeck(data.playerDeck);
+      setDiscardPlayerDeck(data.discardplayerDeck);
+    });
+    wsRef.current.on("drawvirusDeck", (data) => {
+      setVirusDeck(data.virusDeck);
+      setDiscardVirusDeck(data.discardvirusDeck);
+    });
+    wsRef.current.on("setVirus", (data) => {
+      setVirus(data.virus);
+    });
+    wsRef.current.on("setWho", (data) => {
+      setWho(data.who);
+    });
+    wsRef.current.on("setLeftMove", (data) => {
+      setLeftMove(data.leftMove);
+    });
+    if (roomId) {
+      wsRef.current.emit("queryGame", userId);
+    }
+
     // console.log(others);
     //dispatch(Addevent({ event: "room" }));
     // console.log(others);

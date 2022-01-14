@@ -16,6 +16,7 @@ export const sessionSlice = createSlice({
     },
     Logout: (state) => {
       state.login = false;
+      state.userId = null;
     },
     Joingame: (state, action) => {
       console.log(action.payload);

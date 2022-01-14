@@ -14,6 +14,9 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import instance from "../instance";
 import { useState, useRef } from "react";
+import { useDispatch } from "react-redux";
+import { Login } from "../features/session/sessionSlices";
+import bcrypt from "bcryptjs";
 function Copyright(props) {
   return (
     <Typography
@@ -39,6 +42,7 @@ export default function SignInSide(props) {
   const [errorMessage, setErrorMessage] = useState("");
   let idRef = useRef(null);
   let pwRef = useRef(null);
+  const dispatch = useDispatch();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -49,16 +53,32 @@ export default function SignInSide(props) {
     });
     const userId = data.get("email");
     const password = data.get("password");
-    instance
-      .post("/login", { userId, password })
-      .then((res) => props.navigate("/"))
-      .catch((err) => {
-        setWrong(true);
-        idRef.current.value = "";
-        pwRef.current.value = "";
-        idRef.current.focus();
-        setErrorMessage("Wrong Id or password");
-      });
+    try {
+      console.log(userId, password);
+      const user = await instance.post("/login", { userId, password });
+      console.log(user);
+      dispatch(Login({ userId: user.data.userId, roomId: user.data.roomId }));
+      props.navigate("/");
+    } catch (e) {
+      setWrong(true);
+      idRef.current.value = "";
+      pwRef.current.value = "";
+      idRef.current.focus();
+      setErrorMessage("Wrong Id or password");
+    }
+
+    // (({ data: { userId, roomId } }) => {
+    //   dispatch(Login({ userId, roomId }));
+    //   console.log(data);
+    //   props.navigate("/");
+    // })
+    // .catch((err) => {
+    //   setWrong(true);
+    //   idRef.current.value = "";
+    //   pwRef.current.value = "";
+    //   idRef.current.focus();
+    //   setErrorMessage("Wrong Id or password");
+    // });
   };
 
   return (
