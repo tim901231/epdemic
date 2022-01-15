@@ -90,8 +90,9 @@ function Game(props) {
     wsRef.current.on("setLeftMove", (data) => {
       setLeftMove(data.leftMove);
     });
-
-    wsRef.current.emit("queryGame", roomId);
+    if (roomId) {
+      wsRef.current.emit("queryGame", roomId);
+    }
 
     // console.log(others);
     //dispatch(Addevent({ event: "room" }));
