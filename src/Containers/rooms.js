@@ -25,13 +25,15 @@ import {
   Alert,
 } from "@mui/material";
 import { useSelector } from "react-redux";
+
+import { WEBSOCKET_URL } from "../constants/constants";
+
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: "center",
   color: theme.palette.text.secondary,
 }));
-const WEBSOCKET_URL = "localhost:5000";
 export default function Rooms(props) {
   const [rooms, setRooms] = useState([]);
   const userId = useSelector((state) => state.session.userId);

@@ -158,7 +158,7 @@ router.post("/forgetpw", async (req, res) => {
 });
 router.post("/joinRoom", async (req, res) => {
   const { gameId } = req.body;
-  req.session.gameId = gameId;
+  // req.session.gameId = gameId;
   res.status(200).send();
 });
 router.post("/resetpw", async (req, res) => {

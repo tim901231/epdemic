@@ -23,8 +23,7 @@ import io from "socket.io-client";
 import GameBoard from "../Components/gameBoard";
 
 import { jobs } from "../constants/job";
-
-const WEBSOCKET_URL = "https://socket-server-2.herokuapp.com/";
+import { WEBSOCKET_URL } from "../constants/constants";
 
 // console.log(job);
 function Game(props) {

@@ -26,13 +26,15 @@ import {
   Alert,
 } from "@mui/material";
 import { useSelector } from "react-redux";
+import { WEBSOCKET_URL } from "../constants/constants";
+
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: "center",
   color: theme.palette.text.secondary,
 }));
-const WEBSOCKET_URL = "localhost:5000";
+
 export default function Room(props) {
   const [rooms, setRooms] = useState([]);
   const userId = useSelector((state) => state.session.userId);
@@ -54,19 +56,18 @@ export default function Room(props) {
     if (!roomId) {
       props.navigate("./rooms");
     }
-    fetch().then(() => {
-      // console.log(user.data);
-      wsRef.current = io(WEBSOCKET_URL);
+    // console.log(user.data);
+    wsRef.current = io(WEBSOCKET_URL);
 
-      wsRef.current.on("room", (data) => {
-        console.log(data.players);
-        setPlayers([...data.players]);
-      });
-      wsRef.current.on("gameStarted", () => {
-        props.navigate(`./game?gameId=${roomId}`);
-      });
-      wsRef.current.emit("room", roomId);
+    wsRef.current.on("room", (data) => {
+      console.log(data.players);
+      setPlayers([...data.players]);
     });
+    wsRef.current.on("gameStarted", () => {
+      props.navigate(`./game?gameId=${roomId}`);
+    });
+    console.log("send room", roomId);
+    wsRef.current.emit("room", roomId);
 
     //dispatch(Addevent({ event: "room" }));
 
