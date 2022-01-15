@@ -7,7 +7,7 @@ dotenv.config();
 const API_ROOT = new URL("/api", window.location.href);
 
 const instance = axios.create({
-  baseURL: API_ROOT,
+  baseURL: API_ROOT.href,
   withCredentials: true,
 });
 
