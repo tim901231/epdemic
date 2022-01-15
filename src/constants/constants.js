@@ -1,1 +1,1 @@
-export const WEBSOCKET_URL = "localhost:5000";
+export const WEBSOCKET_URL = "https://socket-server-2.herokuapp.com/";
