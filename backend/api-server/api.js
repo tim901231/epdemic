@@ -292,26 +292,19 @@ router.post("/addFriend", async (req, res) => {
   if (myself.friend.find((element) => element === buddy) === undefined) {
     myself.friend.push(buddy);
     myself.save();
-    const users = await User.find({});
-    const friends = users.filter((user) => {
-      return myself.friend.includes(user.userId);
-    });
-    console.log(friends);
-    // const friends = myself.friend.forEach(async (bestie) => {
-    //   const other = await User.find({ userId: bestie });
+    // const users = await User.find({});
+    // const friends = users.filter((user) => {
+    //   return myself.friend.includes(user.userId);
+    // });
+    // console.log(friends);
+    // const buddies = friends.map((friend) => {
     //   return {
-    //     name: other.userId,
-    //     status: other.status,
+    //     name: friend.userId,
+    //     status: friend.status,
     //   };
     // });
-    const buddies = friends.map((friend) => {
-      return {
-        name: friend.userId,
-        status: friend.status,
-      };
-    });
-    console.log(buddies);
-    return res.status(200).send(buddies);
+    // console.log(buddies);
+    return res.status(200).send("successfully add friend");
   } else {
     return res.status(403).send("user already in friend");
   }

@@ -56,11 +56,12 @@ export default function Friends(props) {
   const handleAddFriend = async () => {
     console.log(userId);
     console.log(newFriend);
-    const buddy = await instance.post("/addFriend", {
+    await instance.post("/addFriend", {
       userId,
       newFriend,
     });
     //inputRef.target.value = "";
+    const buddy = await instance.post("/getFriend", { userId });
     console.log(buddy.data);
     setFriends(buddy.data);
     setNewFriend("");
