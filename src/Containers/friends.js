@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import Appbar from "./appbar";
-import instance from "../instance";
+import instance from "../../instance";
 import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";

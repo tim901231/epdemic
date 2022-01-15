@@ -16,7 +16,7 @@ import CardMedia from "@mui/material/CardMedia";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
-import instance from "../instance";
+import instance from "../../instance";
 import ResponsiveAppBar from "./appbar";
 import { Snackbar, Alert, Stack } from "@mui/material";
 
