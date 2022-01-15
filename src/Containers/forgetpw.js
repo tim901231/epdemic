@@ -13,7 +13,7 @@ import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import MailIcon from "@mui/icons-material/Mail";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import instance from "../../instance";
+import instance from "../instance";
 import { useState } from "react";
 function Copyright(props) {
   return (

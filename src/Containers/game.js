@@ -4,7 +4,7 @@ import Appbar from "./appbar";
 import webSocket from "socket.io-client";
 import { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import instance from "../../instance";
+import instance from "../instance";
 import { Login } from "../features/session/sessionSlices";
 import MoveSelector from "../Components/moveSelector";
 // import { job } from "../constants/job.js";
