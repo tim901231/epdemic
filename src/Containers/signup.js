@@ -13,7 +13,7 @@ import SendIcon from "@mui/icons-material/Send";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import instance from "../../instance";
+import instance from "../instance";
 import validator from "email-validator";
 import { useRef, useState } from "react";
 import bcrypt from "bcryptjs";
