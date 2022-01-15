@@ -1,6 +1,9 @@
 import axios from "axios";
+import dotenv from "dotenv-defaults";
 
-const API_ROOT = "http://localhost:4000/api";
+dotenv.config();
+
+const API_ROOT = `https://epedemic.herokuapp.com:${process.env.PORT}/api`;
 
 const instance = axios.create({
   baseURL: API_ROOT,
