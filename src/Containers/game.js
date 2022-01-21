@@ -7,6 +7,9 @@ import { useSelector, useDispatch } from "react-redux";
 import instance from "../instance";
 import { Login } from "../features/session/sessionSlices";
 import MoveSelector from "../Components/moveSelector";
+import CheckIcon from "@mui/icons-material/Check"; // import { job } from "../constants/job.js";
+import { cities } from "../constants/cities";
+
 // import { job } from "../constants/job.js";
 import {
   List,
@@ -66,12 +69,8 @@ function Game(props) {
     // });
 
     wsRef.current.on("gameDetail", (data) => {
-      setOthers(
-        data.players.filter((player) => player.playerId !== user.data.userId)
-      );
-      setMe(
-        data.players.filter((player) => player.playerId === user.data.userId)
-      );
+      setOthers(data.players.filter((player) => player.playerId !== userId));
+      setMe(data.players.filter((player) => player.playerId === userId));
       // setPos(data.pos);
       setLab(data.lab);
       setPos(data.players.map((player) => player.pos));
