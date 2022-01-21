@@ -22,6 +22,7 @@ import {
   Button,
   Typography,
   Box,
+  Modal,
 } from "@mui/material";
 import io from "socket.io-client";
 import GameBoard from "../Components/gameBoard";
@@ -29,6 +30,16 @@ import GameBoard from "../Components/gameBoard";
 import { jobs } from "../constants/job";
 import { WEBSOCKET_URL } from "../constants/constants";
 
+const style = {
+  position: "absolute",
+  top: "10%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 // console.log(job);
 function Game(props) {
   const wsRef = useRef(null);
