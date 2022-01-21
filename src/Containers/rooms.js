@@ -41,7 +41,8 @@ export default function Rooms(props) {
   const socketEvent = useSelector((state) => state.session.socketEvent);
   const [open, setOpen] = useState(false);
   const wsRef = useRef(null);
-
+  console.log(userId);
+  console.log(roomId);
   const dispatch = useDispatch();
   // const { connectWebSocket, joinRoom, ws } = useGame();
   useEffect(() => {

@@ -60,6 +60,7 @@ export default function SignInSide(props) {
       await dispatch(
         Login({ userId: user.data.userId, roomId: user.data.roomId })
       );
+
       props.navigate("/");
     } catch (e) {
       setWrong(true);
