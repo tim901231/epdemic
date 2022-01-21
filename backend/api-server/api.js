@@ -118,7 +118,7 @@ router.get("/verify/:secretToken", async (req, res) => {
   });
 
   //req.flash('success_msg','Thank you.You can now login');
-  res.redirect("http://localhost:3000/login");
+  res.redirect("https://epedemic.herokuapp.com/login");
 });
 router.post("/forgetpw", async (req, res) => {
   const { email } = req.body;
