@@ -19,11 +19,28 @@ import DraftsIcon from "@mui/icons-material/Drafts";
 import { edges } from "../constants/edges";
 import { cities } from "../constants/cities";
 
-export default function MoveSelector({ city, pos, hand }) {
-  // console.log(pos);
+export default function MoveSelector({
+  city,
+  pos,
+  hand,
+  move,
+  fly,
+  flyfrom,
+  lab,
+  treat,
+}) {
+  console.log(pos);
   // console.log("city", city);
   // console.log(hand);
-  // console.log(hand);
+  console.log(hand);
+  const check = () => {
+    console.log(hand.filter((card) => card < 12).length);
+    if (hand.filter((card) => card < 12).length > 4) {
+      console.log("true");
+      return true;
+    }
+    return false;
+  };
   return (
     <Box
       sx={{
@@ -35,7 +52,13 @@ export default function MoveSelector({ city, pos, hand }) {
     >
       <List>
         <ListItem disablePadding>
-          <ListItemButton disabled={!edges[pos].includes(city)}>
+          <ListItemButton
+            disabled={!edges[pos].includes(city)}
+            onClick={() => {
+              // alert("hi");
+              move();
+            }}
+          >
             <ListItemIcon>
               <CommuteIcon />
             </ListItemIcon>
@@ -43,7 +66,7 @@ export default function MoveSelector({ city, pos, hand }) {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton disabled={!hand.includes(city)}>
+          <ListItemButton disabled={!hand.includes(city)} onClick={() => fly()}>
             <ListItemIcon>
               <FlightLandIcon />
             </ListItemIcon>
@@ -51,15 +74,18 @@ export default function MoveSelector({ city, pos, hand }) {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon diabled={!hand.includes(city)}>
+          <ListItemButton
+            disabled={!hand.includes(pos)}
+            onClick={() => flyfrom()}
+          >
+            <ListItemIcon>
               <FlightTakeoffIcon />
             </ListItemIcon>
             <ListItemText primary={"Charter Flight：" + cities[city].name} />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton disabled={true}>
             <ListItemIcon>
               <CompareArrowsIcon />
             </ListItemIcon>
@@ -67,7 +93,7 @@ export default function MoveSelector({ city, pos, hand }) {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton disabled={!hand.includes(pos)} onClick={() => lab()}>
             <ListItemIcon>
               <OtherHousesIcon />
             </ListItemIcon>
@@ -75,7 +101,7 @@ export default function MoveSelector({ city, pos, hand }) {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={() => treat()}>
             <ListItemIcon>
               <MedicalServicesIcon />
             </ListItemIcon>
@@ -83,7 +109,7 @@ export default function MoveSelector({ city, pos, hand }) {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton disabled={true}>
             <ListItemIcon>
               <SchoolIcon />
             </ListItemIcon>
@@ -91,7 +117,7 @@ export default function MoveSelector({ city, pos, hand }) {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton disabled>
             <ListItemIcon>
               <ScienceIcon />
             </ListItemIcon>
