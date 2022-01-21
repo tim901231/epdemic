@@ -8,16 +8,16 @@ const router = express.Router();
 router.get("/", (req, res) => {
   res.json({ a: 1, b: 2 });
 });
-router.get("/session", (req, res) => {
-  //console.log(req.session.id);
-  if (req.session.userId) {
-    res
-      .status(200)
-      .send({ userId: req.session.userId, gameId: req.session.gameId });
-  } else {
-    res.status(200).send();
-  }
-});
+// router.get("/session", (req, res) => {
+//   //console.log(req.session.id);
+//   if (req.session.userId) {
+//     res
+//       .status(200)
+//       .send({ userId: req.session.userId, gameId: req.session.gameId });
+//   } else {
+//     res.status(200).send();
+//   }
+// });
 router.post("/login", async (req, res) => {
   //compare login
   const { userId, password } = req.body;
@@ -35,18 +35,18 @@ router.post("/login", async (req, res) => {
     console.log("Invalid password");
     return;
   }
-  if (!req.session.userId) {
-    req.session.userId = user.userId;
-  }
+  // if (!req.session.userId) {
+  //   req.session.userId = user.userId;
+  // }
   //if (!req.session.gameId) {
-  req.session.gameId = user.gameId;
+  // req.session.gameId = user.gameId;
   //}
   console.log("Successful login");
 
   res.status(200).send();
 });
 router.delete("/login", (req, res) => {
-  req.session.destroy();
+  // req.session.destroy();
   console.log("Successful logout");
   res.status(200).send();
 });
@@ -155,7 +155,7 @@ router.post("/forgetpw", async (req, res) => {
 });
 router.post("/joinRoom", async (req, res) => {
   const { gameId } = req.body;
-  req.session.gameId = gameId;
+  // req.session.gameId = gameId;
   res.status(200).send();
 });
 router.post("/resetpw", async (req, res) => {
