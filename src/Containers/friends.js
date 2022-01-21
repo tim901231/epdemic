@@ -30,8 +30,8 @@ import {
   Typography,
 } from "@mui/material";
 import { useSelector } from "react-redux";
-
-const WEBSOCKET_URL = "localhost:5000";
+import { WEBSOCKET_URL } from "../constants/constants";
+// const WEBSOCKET_URL = "localhost:5000";
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
@@ -95,23 +95,17 @@ export default function Friends(props) {
   };
 
   useEffect(() => {
+    if (!userId) {
+      props.navigate("./login");
+    }
+
     const fetch = async () => {
-      const user = await instance.get("/session");
-      if (user.data) {
-        //console.log(user.data);
-        dispatch(Login({ userId: user.data.userId, roomId: user.data.gameId }));
-        console.log(user.data);
-      } else {
-        props.navigate("./login");
-      }
-      if (user.data.userId) {
-        let buddy = [];
-        buddy = await instance.post("/getFriend", {
-          userId: user.data.userId,
-        });
-        console.log(buddy.data);
-        setFriends(buddy.data);
-      }
+      let buddy = [];
+      buddy = await instance.post("/getFriend", {
+        userId,
+      });
+      console.log(buddy.data);
+      setFriends(buddy.data);
     };
     wsRef.current = io(WEBSOCKET_URL);
     wsRef.current.on("addRoom", (data) => {
@@ -148,7 +142,7 @@ export default function Friends(props) {
               inputProps={{ "aria-label": "search for friends" }}
             />
             <IconButton
-              type="submit"
+              // type="submit"
               sx={{ p: "10px" }}
               aria-label="search"
               onClick={handleAddFriend}

@@ -108,6 +108,7 @@ router.get("/verify/:secretToken", async (req, res) => {
     email: appendingUser.email,
     status: appendingUser.status,
     gameId: appendingUser.gameId,
+    friend: [],
   };
 
   const user = new User(data);

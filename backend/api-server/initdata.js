@@ -28,6 +28,7 @@ const datas = [
     email: "2@gmail.com",
     status: "offline",
     gameId: "",
+    friend: [],
   },
   {
     userId: "3",
@@ -35,6 +36,7 @@ const datas = [
     email: "3@gmail.com",
     status: "offline",
     gameId: "",
+    friend: [],
   },
   {
     userId: "4",
@@ -42,6 +44,7 @@ const datas = [
     email: "4@gmail.com",
     status: "offline",
     gameId: "",
+    friend: [],
   },
 ];
 
