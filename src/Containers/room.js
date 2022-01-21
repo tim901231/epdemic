@@ -151,6 +151,7 @@ export default function Room(props) {
                 height: "15vh",
                 fontSize: "2.5vw",
               }}
+              disabled={players.length === 4 ? false : true} //擋人數若不到4個就按start會爛掉
               onClick={async () => {
                 if (!login) {
                   props.navigate("./login");

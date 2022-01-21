@@ -17,6 +17,7 @@ const useGame = () => {
   const [others, setOthers] = useState([]);
   const [me, setMe] = useState("");
   const [pos, setPos] = useState([2, 2, 2, 2]);
+  const [lab, setLab] = useState([]);
   return {
     players,
     setPlayers,
@@ -39,6 +40,8 @@ const useGame = () => {
     setMe,
     pos,
     setPos,
+    lab,
+    setLab,
   };
 };
 export default useGame;
