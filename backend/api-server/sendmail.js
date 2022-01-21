@@ -3,7 +3,7 @@ import { AppendingUser, User } from "../models/user.js";
 import { uuid } from "uuidv4";
 import dotenv from "dotenv-defaults";
 
-// dotenv.config();
+dotenv.config();
 
 const sendEmail = async (email, purpose, data) => {
   // console.log(process.env.MAIL_URL);
@@ -11,12 +11,10 @@ const sendEmail = async (email, purpose, data) => {
   let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
-    tls: {
-      rejectUnauthorized: false,
-    },
+    secure: true,
     auth: {
-      user: "hackhaha0808@gmail.com",
-      pass: "ck1060941NTU11",
+      user: "station1776@gmail.com",
+      pass: "T1231i519m",
     },
   });
 
