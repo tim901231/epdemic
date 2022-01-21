@@ -56,8 +56,10 @@ export default function SignInSide(props) {
     try {
       console.log(userId, password);
       const user = await instance.post("/login", { userId, password });
-      console.log(user);
-      dispatch(Login({ userId: user.data.userId, roomId: user.data.roomId }));
+      // console.log(user);
+      await dispatch(
+        Login({ userId: user.data.userId, roomId: user.data.roomId })
+      );
       props.navigate("/");
     } catch (e) {
       setWrong(true);
