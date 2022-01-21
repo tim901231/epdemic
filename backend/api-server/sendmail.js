@@ -1,8 +1,13 @@
 import nodemailer from "nodemailer";
 import { AppendingUser, User } from "../models/user.js";
 import { uuid } from "uuidv4";
+import dotenv from "dotenv-defaults";
+
+dotenv.config();
 
 const sendEmail = async (email, purpose, data) => {
+  console.log(process.env.MAIL_URL);
+  console.log(process.env.MAIL_PASSWORD);
   let transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -21,7 +26,7 @@ const sendEmail = async (email, purpose, data) => {
       password: data.password,
       email: data.email,
       status: "signup",
-      gameId: "123",
+      gameId: "",
       secretToken: secretToken,
       active: false,
     };
@@ -30,7 +35,7 @@ const sendEmail = async (email, purpose, data) => {
     user.save();
 
     mailOptions = {
-      from: "hackhaha0808@gmail.com",
+      from: process.env.MAIL_URL,
       to: email,
       subject: "signUp",
       text: "Create new account",
@@ -49,7 +54,7 @@ const sendEmail = async (email, purpose, data) => {
       password: data.password,
       email: data.email,
       status: "forgetPassword",
-      gameId: "123",
+      gameId: "",
       secretToken: secretToken,
       active: false,
     };
@@ -65,7 +70,7 @@ const sendEmail = async (email, purpose, data) => {
     console.log(email);
 
     mailOptions = {
-      from: "hackhaha0808@gmail.com",
+      from: process.env.MAIL_URL,
       to: email,
       subject: "forgotPassword",
       text: "Reset password",
