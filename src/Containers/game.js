@@ -21,6 +21,7 @@ import {
   Card,
   Button,
   Typography,
+  Box,
 } from "@mui/material";
 import io from "socket.io-client";
 import GameBoard from "../Components/gameBoard";
@@ -34,6 +35,8 @@ function Game(props) {
   const roomId = useSelector((state) => state.session.roomId);
   const userId = useSelector((state) => state.session.userId);
   const [city, setCity] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [current, setCurrent] = useState(null);
   const dispatch = useDispatch();
   const {
     who,
