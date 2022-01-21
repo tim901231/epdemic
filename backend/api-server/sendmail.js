@@ -37,12 +37,12 @@ const sendEmail = async (email, purpose, data) => {
     user.save();
 
     mailOptions = {
-      from: "hackhaha0808@gmail.com",
+      from: "station1776@gmail.com",
       to: email,
       subject: "signUp",
       text: "Create new account",
       html: `<p>
-          Click <a href=http://localhost:4000/api/verify/${secretToken}>here</a>
+          Click <a href=https://epedemic.herokuapp.com/api/verify/${secretToken}>here</a>
           to create your new account
         </p>`,
     };
@@ -72,11 +72,11 @@ const sendEmail = async (email, purpose, data) => {
     console.log(email);
 
     mailOptions = {
-      from: "hackhaha0808@gmail.com",
+      from: "station1776@gmail.com",
       to: email,
       subject: "forgotPassword",
       text: "Reset password",
-      html: `<p>Click <a href=http://localhost:3000/resetpw?secretToken=${secretToken}>here</a>
+      html: `<p>Click <a href=https://epedemic.herokuapp.com/resetpw?secretToken=${secretToken}>here</a>
        to reset your password</p>`,
     };
   }
