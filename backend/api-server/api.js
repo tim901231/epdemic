@@ -43,7 +43,7 @@ router.post("/login", async (req, res) => {
   //}
   console.log("Successful login");
 
-  res.status(200).send();
+  res.status(200).send({ userId: user.userId, roomId: user.gameId });
 });
 router.delete("/login", (req, res) => {
   // req.session.destroy();
