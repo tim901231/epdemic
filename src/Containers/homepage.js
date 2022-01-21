@@ -11,11 +11,13 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
+import { Login, Logout } from "../features/session/sessionSlices";
 import instance from "../instance";
 import ResponsiveAppBar from "./appbar";
 import { Snackbar, Alert, Stack } from "@mui/material";
@@ -42,9 +44,18 @@ function HomePage(props) {
   const [open, setOpen] = useState(false);
   const login = useSelector((state) => state.session.login);
   const userId = useSelector((state) => state.session.userId);
-  const roomId = useSelector((state) => state.session.roomId);
   const dispatch = useDispatch();
-  console.log(userId, roomId);
+  useEffect(() => {
+    const fetch = async () => {
+      const { data } = await instance.get("/session");
+      console.log(data);
+      if (data) {
+        dispatch(Login({ userId: data.userId, roomId: data.gameId }));
+      }
+    };
+
+    fetch();
+  }, []);
   return (
     <div>
       <ResponsiveAppBar navigate={props.navigate} />

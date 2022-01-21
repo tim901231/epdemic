@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import instance from "../instance";
 import { Login } from "../features/session/sessionSlices";
 import MoveSelector from "../Components/moveSelector";
-// import { job } from "../constants/job.js";
+import CheckIcon from "@mui/icons-material/Check"; // import { job } from "../constants/job.js";
 import {
   List,
   ListSubheader,
@@ -18,19 +18,34 @@ import {
   Card,
   Button,
   Typography,
+  Modal,
+  Box,
+  stepIconClasses,
 } from "@mui/material";
 import io from "socket.io-client";
 import GameBoard from "../Components/gameBoard";
-
+import { cities } from "../constants/cities";
 import { jobs } from "../constants/job";
-import { WEBSOCKET_URL } from "../constants/constants";
 
+const WEBSOCKET_URL = "http://localhost:5000";
+const style = {
+  position: "absolute",
+  top: "10%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 // console.log(job);
 function Game(props) {
   const wsRef = useRef(null);
   const roomId = useSelector((state) => state.session.roomId);
   const userId = useSelector((state) => state.session.userId);
   const [city, setCity] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [current, setCurrent] = useState(null);
   const dispatch = useDispatch();
   const {
     who,
@@ -40,6 +55,9 @@ function Game(props) {
     players,
     others,
     pos,
+    lab,
+    setLab,
+    setPos,
     setOthers,
     setPlayers,
     setWho,
@@ -52,48 +70,58 @@ function Game(props) {
     setVirus,
   } = useGame();
   useEffect(() => {
-    if (!userId) {
-      props.navigate("/login");
-    }
+    let user;
+    const fetch = async () => {
+      user = await instance.get("/session");
+      if (user.data) {
+        dispatch(Login({ userId: user.data.userId, roomId: user.data.gameId }));
+      }
+    };
+    fetch().then(() => {
+      wsRef.current = io(WEBSOCKET_URL);
+      // wsRef.current.on("room", (data) => {
+      //   console.log(data.players);
+      //   setPlayers([...data.players]);
+      // });
 
-    wsRef.current = io(WEBSOCKET_URL);
-    // wsRef.current.on("room", (data) => {
-    //   console.log(data.players);
-    //   setPlayers([...data.players]);
-    // });
-
-    wsRef.current.on("gameDetail", (data) => {
-      setOthers(data.players.filter((player) => player.playerId !== userId));
-      setMe(data.players.filter((player) => player.playerId === userId));
-      setPlayers(data.players);
-      setVirus(data.virus);
-      setWho(data.who);
-      setPlayerDeck(data.playerDeck);
-      setDiscardPlayerDeck(data.discardplayerDeck);
-      setVirusDeck(data.virusDeck);
-      setDiscardVirusDeck(data.discardvirusDeck);
+      wsRef.current.on("gameDetail", (data) => {
+        console.log(data);
+        setOthers(
+          data.players.filter((player) => player.playerId !== user.data.userId)
+        );
+        setMe(
+          data.players.filter((player) => player.playerId === user.data.userId)
+        );
+        // setPos(data.pos);
+        setLab(data.lab);
+        setPos(data.players.map((player) => player.pos));
+        setPlayers(data.players);
+        setVirus(data.virus);
+        setWho(data.who);
+        setPlayerDeck(data.playerDeck);
+        setDiscardPlayerDeck(data.discardplayerDeck);
+        setVirusDeck(data.virusDeck);
+        setDiscardVirusDeck(data.discardvirusDeck);
+      });
+      wsRef.current.on("drawPlayerDeck", (data) => {
+        setPlayerDeck(data.playerDeck);
+        setDiscardPlayerDeck(data.discardplayerDeck);
+      });
+      wsRef.current.on("drawvirusDeck", (data) => {
+        setVirusDeck(data.virusDeck);
+        setDiscardVirusDeck(data.discardvirusDeck);
+      });
+      wsRef.current.on("setVirus", (data) => {
+        setVirus(data.virus);
+      });
+      wsRef.current.on("setWho", (data) => {
+        setWho(data.who);
+      });
+      wsRef.current.on("setLeftMove", (data) => {
+        setLeftMove(data.leftMove);
+      });
+      wsRef.current.emit("queryGame", user.data.gameId);
     });
-    wsRef.current.on("drawPlayerDeck", (data) => {
-      setPlayerDeck(data.playerDeck);
-      setDiscardPlayerDeck(data.discardplayerDeck);
-    });
-    wsRef.current.on("drawvirusDeck", (data) => {
-      setVirusDeck(data.virusDeck);
-      setDiscardVirusDeck(data.discardvirusDeck);
-    });
-    wsRef.current.on("setVirus", (data) => {
-      setVirus(data.virus);
-    });
-    wsRef.current.on("setWho", (data) => {
-      setWho(data.who);
-    });
-    wsRef.current.on("setLeftMove", (data) => {
-      setLeftMove(data.leftMove);
-    });
-    if (roomId) {
-      wsRef.current.emit("queryGame", roomId);
-    }
-
     // console.log(others);
     //dispatch(Addevent({ event: "room" }));
     // console.log(others);
@@ -101,6 +129,22 @@ function Game(props) {
   }, []);
   // console.log(players);
   // console.log(who);
+  const move = () => {
+    console.log("move", roomId, city);
+    wsRef.current.emit("move", { gameId: roomId, city });
+  };
+  const fly = () => {
+    wsRef.current.emit("fly", { gameId: roomId, city });
+  };
+  const flyfrom = () => {
+    wsRef.current.emit("flyfrom", { gameId: roomId, city });
+  };
+  const build_lab = () => {
+    wsRef.current.emit("lab", { gameId: roomId, city });
+  };
+  const treat = () => {
+    wsRef.current.emit("treat", { gameId: roomId });
+  };
   return (
     <div>
       <Appbar navigate={props.navigate} />
@@ -135,6 +179,11 @@ function Game(props) {
                 city={city}
                 pos={pos[who] ? pos[who] : 2}
                 hand={players[who] ? players[who].playerHand : []}
+                move={move}
+                fly={fly}
+                flyfrom={flyfrom}
+                lab={build_lab}
+                treat={treat}
               ></MoveSelector>
               {/* 456 */}
               {/* <Grid innerContainer>
@@ -165,11 +214,17 @@ function Game(props) {
               <Card>
                 <Typography
                   ml={"10px"}
-                  sx={{ fontSize: 26 }}
+                  sx={{ fontSize: 20 }}
                   color="text.secondary"
                   gutterBottom
                 >
+                  {others[0] && players[who] ? (
+                    players[who].playerId === others[0].playerId ? (
+                      <CheckIcon />
+                    ) : null
+                  ) : null}
                   {others[0] ? others[0].playerId : null}
+                  {others[0] ? "：" + cities[others[0].pos].name : null}
                 </Typography>
                 <Typography
                   ml={"10px"}
@@ -179,17 +234,60 @@ function Game(props) {
                 >
                   Job: {others[0] ? jobs[others[0].playerJob] : null}
                 </Typography>
-                <Button ml={"10px"}>ShowCard</Button>
+                <Button
+                  ml={"10px"}
+                  onClick={() => {
+                    setCurrent(others[0]);
+                    setOpen(true);
+                  }}
+                >
+                  ShowCard
+                </Button>
+                <Modal
+                  open={open}
+                  onClose={() => setOpen(false)}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
+                  <Box
+                    style={style}
+                    sx={{
+                      backgroundColor: "white",
+                    }}
+                  >
+                    <Typography
+                      ml={2}
+                      id="modal-modal-title"
+                      variant="h6"
+                      component="h2"
+                    >
+                      {current ? current.playerId : null}
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                      {current
+                        ? current.playerHand.map((card) => (
+                            <Button>{cities[card].name}</Button>
+                          ))
+                        : null}
+                    </Typography>
+                  </Box>
+                </Modal>
               </Card>
               <br />
               <Card>
                 <Typography
                   ml={"10px"}
-                  sx={{ fontSize: 26 }}
+                  sx={{ fontSize: 20 }}
                   color="text.secondary"
                   gutterBottom
                 >
+                  {others[1] && players[who] ? (
+                    players[who].playerId === others[1].playerId ? (
+                      <CheckIcon />
+                    ) : null
+                  ) : null}
                   {others[1] ? others[1].playerId : null}
+                  {others[1] ? "：" + cities[others[1].pos].name : null}
                 </Typography>
                 <Typography
                   ml={"10px"}
@@ -199,17 +297,31 @@ function Game(props) {
                 >
                   Job: {others[1] ? jobs[others[1].playerJob] : null}
                 </Typography>
-                <Button ml={"10px"}>ShowCard</Button>
+                <Button
+                  onClick={() => {
+                    setCurrent(others[1]);
+                    setOpen(true);
+                  }}
+                  ml={"10px"}
+                >
+                  ShowCard
+                </Button>
               </Card>
               <br />
               <Card>
                 <Typography
                   ml={"10px"}
-                  sx={{ fontSize: 26 }}
+                  sx={{ fontSize: 20 }}
                   color="text.secondary"
                   gutterBottom
                 >
+                  {others[2] && players[who] ? (
+                    players[who].playerId === others[2].playerId ? (
+                      <CheckIcon />
+                    ) : null
+                  ) : null}
                   {others[2] ? others[2].playerId : null}
+                  {others[2] ? "：" + cities[others[2].pos].name : null}
                 </Typography>
                 <Typography
                   ml={"10px"}
@@ -219,7 +331,15 @@ function Game(props) {
                 >
                   Job: {others[2] ? jobs[others[2].playerJob] : null}
                 </Typography>
-                <Button ml={"10px"}>ShowCard</Button>
+                <Button
+                  onClick={() => {
+                    setCurrent(others[2]);
+                    setOpen(true);
+                  }}
+                  ml={"10px"}
+                >
+                  ShowCard
+                </Button>
               </Card>
             </Grid>
           </Grid>
@@ -232,7 +352,13 @@ function Game(props) {
                 color="text.secondary"
                 gutterBottom
               >
+                {players[who] ? (
+                  players[who].playerId === userId ? (
+                    <CheckIcon />
+                  ) : null
+                ) : null}
                 {userId}
+                {me.length > 0 ? "：" + cities[me[0].pos].name : null}
               </Typography>
               <Typography
                 ml={"10px"}
@@ -242,7 +368,22 @@ function Game(props) {
               >
                 Job: {me.length > 0 ? jobs[me[0].playerJob] : null}
               </Typography>
+              {me.length > 0
+                ? me[0].playerHand.map((card) => (
+                    <Button>{cities[card].name}</Button>
+                  ))
+                : null}
             </Card>
+            <Button>Labs:</Button>
+            {lab.length > 0 ? (
+              <>
+                {lab.map((item) => {
+                  return <Button>{item}</Button>;
+                })}
+              </>
+            ) : (
+              "None"
+            )}
           </Grid>
           {/* <Card>
             <Typography

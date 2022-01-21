@@ -8,6 +8,8 @@ import { styled } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
 import { Login, Joingame, Addevent } from "../features/session/sessionSlices";
 import useGame from "../Hooks/useGame";
+import { SocketContext } from "../socket";
+import io from "socket.io-client";
 
 import {
   Card,
@@ -29,7 +31,7 @@ import {
 } from "@mui/material";
 import { useSelector } from "react-redux";
 
-// const WEBSOCKET_URL = "localhost:5000";
+const WEBSOCKET_URL = "localhost:5000";
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
@@ -77,26 +79,49 @@ export default function Friends(props) {
     setFriends(buddy.data);
   };
 
+  const handleInviteFriend = async (name) => {
+    const room = await instance.post("/room", { userId });
+    const roomId = room.data.roomId;
+    console.log(roomId);
+
+    wsRef.current.emit("inviteJoinRoom", {
+      friendId: name,
+      roomId: roomId,
+    });
+    // await instance.post("/addFriend", {
+    //   userId,
+    //   newFriend,
+    // });
+  };
+
   useEffect(() => {
     const fetch = async () => {
-      if (!userId) {
+      const user = await instance.get("/session");
+      if (user.data) {
+        //console.log(user.data);
+        dispatch(Login({ userId: user.data.userId, roomId: user.data.gameId }));
+        console.log(user.data);
+      } else {
         props.navigate("./login");
       }
-      // const user = await instance.get("/session");
-      // if (user.data) {
-      //   //console.log(user.data);
-      //   dispatch(Login({ userId: user.data.userId, roomId: user.data.gameId }));
-      //   console.log(user.data);
-      // } else {
-      //   props.navigate("./login");
-      // }
-
-      const buddy = await instance.post("/getFriend", {
-        userId,
-      });
-      //console.log(buddy.data);
-      setFriends(buddy.data);
+      if (user.data.userId) {
+        let buddy = [];
+        buddy = await instance.post("/getFriend", {
+          userId: user.data.userId,
+        });
+        console.log(buddy.data);
+        setFriends(buddy.data);
+      }
     };
+    wsRef.current = io(WEBSOCKET_URL);
+    wsRef.current.on("addRoom", (data) => {
+      // console.log(data);
+      // //console.log(socketEvent);
+      // instance.post("/joinRoom", { gameId: data.gameId });
+      // dispatch(Joingame({ roomId: data.gameId }));
+      // props.navigate(`./room?roomId=${roomId}`);
+      //dispatch(Addevent({ event: "addRoom" }));
+    });
 
     fetch();
   }, []);
@@ -152,13 +177,22 @@ export default function Friends(props) {
               >
                 <CardContent sx={{ alignItems: "center" }}>
                   <Grid container spacing={1}>
-                    <Grid item xs={4}>
+                    <Grid item xs={3}>
                       <Item>{friend.name}</Item>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={3}>
                       <Item>{friend.status}</Item>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={3}>
+                      <Button
+                        sx={{ float: "right" }}
+                        //disabled={friend.status === "signUp" ? false : true}
+                        onClick={() => handleInviteFriend(friend.name)}
+                      >
+                        Invite to game
+                      </Button>
+                    </Grid>
+                    <Grid item xs={3}>
                       <Button
                         sx={{ float: "right" }}
                         onClick={() => handleDeleteFriend(friend.name)}

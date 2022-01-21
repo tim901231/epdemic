@@ -13,6 +13,7 @@ const sendEmail = async (email, purpose, data) => {
     auth: {
       user: "hackhaha0808@gmail.com",
       pass: "ck1060941NTU11",
+      port: 465,
     },
   });
 
