@@ -9,11 +9,14 @@ const sendEmail = async (email, purpose, data) => {
   // console.log(process.env.MAIL_URL);
   // console.log(process.env.MAIL_PASSWORD);
   let transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    tls: {
+      rejectUnauthorized: false,
+    },
     auth: {
       user: "hackhaha0808@gmail.com",
       pass: "ck1060941NTU11",
-      port: 465,
     },
   });
 
