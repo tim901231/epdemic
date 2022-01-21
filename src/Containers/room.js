@@ -40,7 +40,7 @@ export default function Room(props) {
   const userId = useSelector((state) => state.session.userId);
   const roomId = useSelector((state) => state.session.roomId);
   const login = useSelector((state) => state.session.login);
-  const socketEvent = useSelector((state) => state.session.socketEvent);
+  // const socketEvent = useSelector((state) => state.session.socketEvent);
   const [open, setOpen] = useState(false);
   const [room, setRoom] = useState(null);
   const [players, setPlayers] = useState([]);
