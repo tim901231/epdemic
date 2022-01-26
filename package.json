@@ -21,6 +21,7 @@
     "dotenv-defaults": "^3.0.0",
     "email-validator": "^2.0.4",
     "express": "^4.17.2",
+    "googleapis": "^92.0.0",
     "http": "^0.0.1-security",
     "konva": "^8.3.2",
     "mongoose": "^6.1.6",

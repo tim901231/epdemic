@@ -1,20 +1,41 @@
 import nodemailer from "nodemailer";
 import { AppendingUser, User } from "../models/user.js";
 import { uuid } from "uuidv4";
+import { google } from "googleapis";
 import dotenv from "dotenv-defaults";
 
 dotenv.config();
+const OAuth2 = google.auth.OAuth2;
+
+const oauth2Client = new OAuth2(
+  "753643026049-edo39t9184pcn8fan2107vs7h2743iju.apps.googleusercontent.com", // ClientID
+  "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", // Client Secret
+  "https://developers.google.com/oauthplayground" // Redirect URL
+);
+
+oauth2Client.setCredentials({
+  refresh_token:
+    "1//04tDUXOKbmzP-CgYIARAAGAQSNwF-L9IrW2CLVyclHKfnJ51yCybJmsH2K5plfEfTR004F6mAoEVdGvvQMgC4KwFuPohNjXwXMwo",
+});
+const accessToken = oauth2Client.getAccessToken();
 
 const sendEmail = async (email, purpose, data) => {
   // console.log(process.env.MAIL_URL);
   // console.log(process.env.MAIL_PASSWORD);
   let transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
+    service: "gmail",
     auth: {
-      user: "station1776@gmail.com",
-      pass: "T1231i519m",
+      type: "OAuth2",
+      user: "hackhaha0808@gmail.com",
+      clientId:
+        "753643026049-edo39t9184pcn8fan2107vs7h2743iju.apps.googleusercontent.com",
+      clientSecret: "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",
+      refreshToken:
+        "1//04tDUXOKbmzP-CgYIARAAGAQSNwF-L9IrW2CLVyclHKfnJ51yCybJmsH2K5plfEfTR004F6mAoEVdGvvQMgC4KwFuPohNjXwXMwo",
+      accessToken: accessToken,
+    },
+    tls: {
+      rejectUnauthorized: false,
     },
   });
 
@@ -37,7 +58,7 @@ const sendEmail = async (email, purpose, data) => {
     user.save();
 
     mailOptions = {
-      from: "station1776@gmail.com",
+      from: "hackhaha0808@gmail.com",
       to: email,
       subject: "signUp",
       text: "Create new account",
@@ -72,7 +93,7 @@ const sendEmail = async (email, purpose, data) => {
     console.log(email);
 
     mailOptions = {
-      from: "station1776@gmail.com",
+      from: "hackhaha0808@gmail.com",
       to: email,
       subject: "forgotPassword",
       text: "Reset password",
